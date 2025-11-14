@@ -86,8 +86,11 @@ clasp push
 
 🛠️ Tecnologías usadas
 Google Apps Script (JavaScript)
+
 Google Sheets
+
 Google Drive API
+
 Google Workspace Triggers
 
 CLASP (Apps Script CLI)
