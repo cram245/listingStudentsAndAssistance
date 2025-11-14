@@ -20,6 +20,7 @@ El script identifica cada uno de estos libros, actualiza la información y sincr
 El objetivo principal es eliminar trabajo manual repetitivo y permitir una gestión simple, consistente y escalable.
 
 ✨ Características
+
 🏫 Multicentro
 
 Lectura automática de centros desde una fuente principal (mapa o tabla).
