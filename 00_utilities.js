@@ -37,11 +37,11 @@ function obtenerIdsDeLibros(nombres) {
 
 function obtenerIdDeLibroOrFail(nombre) {
 
-  const archivo = DriverApp.getFilesByName(nombre);
+  const archivo = DriveApp.getFilesByName(nombre);
   if (archivo.hasNext())
     return archivo.next().getId();
   
-  throw new Error("Libro no encontrado");
+  throw new Error("Libro" + nombre + " no encontrado");
 }
 
 

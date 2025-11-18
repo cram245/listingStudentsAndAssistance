@@ -10,15 +10,15 @@ function processarAssistencias(libro_id, span_checkbox) {
   const ultimaFila = sheetAlumnos.getLastRow();
   const ultimaColumna = sheetAlumnos.getLastColumn();
 
-  const nombresAlumnos = sheetAssistencia.getRange(1, 1, sheetAssistencia.getLastRow() == 0 ? 2 : sheetAssistencia.getLastRow(), 1).getValues()[0];
+  const nombresAlumnos = sheetAssistencia.getRange(1, 1, sheetAssistencia.getLastRow() == 0 ? 2 : sheetAssistencia.getLastRow(), 1).getValues();
 
   // Creamos un mapa: valor → fila
-  const mapaAlumnos = {};
-  nombresAlumnos.forEach((val, rowIndex) => {
-    mapaAlumnos[val] = rowIndex + 1;
-  });
-  
-  
+  const mapaAlumnos = new Map();
+  for (let i = 0; i < nombresAlumnos.length; ++i) {
+    const nombreAlumno = nombresAlumnos[i][0];
+    if (nombreAlumno != null && nombreAlumno != "")
+      mapaAlumnos.set(nombreAlumno, i + 1); // el + 1 es porque la primera fila es para la fecha
+  }
 
   // el primer checkbox esta en span_checkbox y apartir de ahi hay que contar también la columna de espacio
   for (let col = span_checkbox; col <= ultimaColumna; col += span_checkbox + 1) {
@@ -56,20 +56,17 @@ function escribirAssistencias(sheetAssistencia, filasParaGuardar, mapaAlumnos) {
   const celda = sheetAssistencia.getRange(1, lastCol);
   celda.setValue(filasParaGuardar[0][0]);
 
-  Logger.log(mapaAlumnos.keys());
-
   // miramos si el alumno ya existe
   for (let fila of filasParaGuardar) {
     const nombreAlumno = fila[1];
 
     // si no existe el alumno lo creamos
-    if (!(nombreAlumno in mapaAlumnos)) {
-      Logger.log("el alumno " + nombreAlumno + "no estaba en el mapaAlumnos");
-      mapaAlumnos[nombreAlumno] = ++lastRow;
+    if (!mapaAlumnos.has(nombreAlumno)) {
+      mapaAlumnos.set(nombreAlumno, ++lastRow);
       sheetAssistencia.getRange(lastRow, 1).setValue(fila[1]);
     }
 
-    const row = mapaAlumnos[nombreAlumno];
+    const row = mapaAlumnos.get(nombreAlumno);
     sheetAssistencia.getRange(row, lastCol).setValue(fila[2]);
   }
 
@@ -91,6 +88,6 @@ function processarAssistenciasForAllCenters() {
 function processarAssistenciaCentro() {
   nombreCentro = getSelectedCenterName();
   
-  const idLibro = obtenerIdDeLibroOrFail(nombreCentro);
+  const idLibro = obtenerIdDeLibroOrFail("Alumnos " + nombreCentro);
   processarAssistencias(idLibro, 3);
 }
