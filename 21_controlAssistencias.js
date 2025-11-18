@@ -73,6 +73,29 @@ function escribirAssistencias(sheetAssistencia, filasParaGuardar, mapaAlumnos) {
   sheetAssistencia.autoResizeColumn(lastCol);
 }
 
+function arreglarNombresDuplicados(libro_id) {
+  const ss = SpreadsheetApp.openById(libro_id);
+  const sheetAssistencia = ss.getSheetByName("Assistencias");
+
+  const ultimaFila = sheetAssistencia.getLastRow();
+  const ultimaColumna = sheetAssistencia.getLastColumn();
+  if (ultimaFila == 0 || ultimaColumna == 0) {
+    throw new Error("La hoja de assistencia seleccionada no tenia datos");
+  }
+
+  const nombresAlumnos = sheetAssistencia.getRange(1, 1, sheetAssistencia.getLastRow(), 1).getValues();
+  const mapaAlumnos = new Map();
+  for (let i = 0; i < nombresAlumnos.length; ++i) {
+    const nombreAlumno = nombresAlumnos[i][0];
+    if (nombreAlumno != null && nombreAlumno != "") {
+      if (mapaAlumnos.has(nombreAlumno))
+        mezclarFilas(sheetAssistencia, i + 1, mapaAlumnos.get(nombreAlumno));
+      else
+        mapaAlumnos.set(nombreAlumno, i + 1); // el + 1 es porque la primera fila es para la fecha
+    }
+  }
+}
+
 function processarAssistenciasForAllCenters() {
   const centros = new Map(getCentros());
   const nombreLibros = Array.from(centros.keys()).map(v => "Alumnos " + String(v));
@@ -90,4 +113,12 @@ function processarAssistenciaCentro() {
   
   const idLibro = obtenerIdDeLibroOrFail("Alumnos " + nombreCentro);
   processarAssistencias(idLibro, 3);
+}
+
+function arreglarNombresDuplicadosCentro() {
+  nombreCentro = getSelectedCenterName();
+  
+  const idLibro = obtenerIdDeLibroOrFail("Alumnos " + nombreCentro);
+  arreglarNombresDuplicados(idLibro);
+  
 }

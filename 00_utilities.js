@@ -123,3 +123,17 @@ function getLastWeekDateFromCatalanDayName(name) {
 
   return result;
 }
+
+
+// borra toda la fila origen y la combina con la fila destino
+function mezclarFilas(hoja, filaOrigen, filaDestino) {
+  const lastCol = hoja.getLastColumn();
+  
+  const origen = hoja.getRange(filaOrigen, 1, 1, lastCol).getValues()[0];
+  const destino = hoja.getRange(filaDestino, 1, 1, lastCol).getValues()[0];
+
+  const combinado = destino.map((v, i) => v !== "" ? v : origen[i]);
+
+  hoja.getRange(filaDestino, 1, 1, lastCol).setValues([combinado]);
+  hoja.getRange(filaOrigen, 1, 1, lastCol).clearContent(); // opcional
+}
