@@ -4,7 +4,8 @@ function onOpen() {
     .addItem("Refrescar lista de centros", "loadCentros")
     .addItem("Cargar alumnos del centro seleccionado", "escribirCursosYAlumnosPorCentro")
     .addItem("Crear/actualizar libro del centro", "actualizarLibroCentro")
-    .addItem("Test processar assistencias", "listarAlumnosForAllCenters")
+    .addItem("Processar assistencias para todos los centros", "listarAlumnosForAllCenters")
+    .addItem("Procesar assistencias del centro seleccionado", "processarAssistenciaCentro")
     .addToUi();
 
   loadCentros();

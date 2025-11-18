@@ -35,6 +35,15 @@ function obtenerIdsDeLibros(nombres) {
   });
 }
 
+function obtenerIdDeLibroOrFail(nombre) {
+
+  const archivo = DriverApp.getFilesByName(nombre);
+  if (archivo.hasNext())
+    return archivo.next().getId();
+  
+  throw new Error("Libro no encontrado");
+}
+
 
 function mapToObject(map) {
   var obj = {};

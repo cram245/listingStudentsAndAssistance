@@ -124,7 +124,7 @@ function escribirCursosYAlumnosPorCentro(ss = SpreadsheetApp.getActiveSpreadshee
 
 
   // limpia contenidos desde la fila 3
-  hoja.getRange("A3:Z").clear(); 
+  hoja.getRange("A3:Z").clearContent().clearFormat().clearDataValidations(); 
 
   // Título y fecha de actualización de alumnos
   const now = new Date();

@@ -56,12 +56,15 @@ function escribirAssistencias(sheetAssistencia, filasParaGuardar, mapaAlumnos) {
   const celda = sheetAssistencia.getRange(1, lastCol);
   celda.setValue(filasParaGuardar[0][0]);
 
+  Logger.log(mapaAlumnos.keys());
+
   // miramos si el alumno ya existe
   for (let fila of filasParaGuardar) {
     const nombreAlumno = fila[1];
 
     // si no existe el alumno lo creamos
     if (!(nombreAlumno in mapaAlumnos)) {
+      Logger.log("el alumno " + nombreAlumno + "no estaba en el mapaAlumnos");
       mapaAlumnos[nombreAlumno] = ++lastRow;
       sheetAssistencia.getRange(lastRow, 1).setValue(fila[1]);
     }
@@ -83,4 +86,11 @@ function processarAssistenciasForAllCenters() {
       processarAssistencias(id, 3);
     }
   }
+}
+
+function processarAssistenciaCentro() {
+  nombreCentro = getSelectedCenterName();
+  
+  const idLibro = obtenerIdDeLibroOrFail(nombreCentro);
+  processarAssistencias(idLibro, 3);
 }
