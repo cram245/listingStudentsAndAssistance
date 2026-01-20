@@ -97,6 +97,9 @@ function escribirAlumnosPorGrupo(hoja, row, col, cursos, cursoToAlumnos) {
     for (const alumno of alumnosOrdenados) {
       hoja.getRange(row, col).setValue(alumno.nombreCompleto);
       hoja.getRange(row, col + 1).setValue(alumno.cursoEscolar);
+      
+      // si se desea obtener los telefonos de los alumnos descommentar
+      //hoja.getRange(row, col + 2).setValue(getTelefAlumno(alumno.id));
       row++;
     }
     
@@ -109,6 +112,7 @@ function escribirAlumnosPorGrupo(hoja, row, col, cursos, cursoToAlumnos) {
   hoja.autoResizeColumn(col);
   hoja.autoResizeColumn(col + 1);
   hoja.setColumnWidth(col + 2, 20);
+  hoja.setColumnWidth(col + 3, 40);
 
   return col + 4; // nombre alumno mas edad mas checkbox mas una de espacio
 }
@@ -126,11 +130,8 @@ function escribirCursosYAlumnosPorCentro(ss = SpreadsheetApp.getActiveSpreadshee
   // limpia contenidos desde la fila 3
   hoja.getRange("A3:Z").clearContent().clearFormat().clearDataValidations(); 
 
-  // Título y fecha de actualización de alumnos
-  const now = new Date();
-  hoja.getRange("A3").setValue(`Última actualización alumnos: ${now}`);
-
   const cursosOrdenados = Array.from(cursoToAlumnos.keys()).sort((a, b) => a.localeCompare(b));
+  //Logger.log(cursosOrdenados);
   
   if (cursosOrdenados.length === 0) {
     hoja.getRange(row, 1).setValue("No se encontraron alumnos para ese centro.");
@@ -154,7 +155,11 @@ function escribirCursosYAlumnosPorCentro(ss = SpreadsheetApp.getActiveSpreadshee
   // para los cursos que no tienen dia
   const cursosSinDia = cursosOrdenados.filter(curso => !CATALAN_DAYS.some(dia => curso.endsWith(dia)));
   let row = 9;
-  col = escribirAlumnosPorGrupo(hoja, row, col, cursosSinDia, cursoToAlumnos);  
+  col = escribirAlumnosPorGrupo(hoja, row, col, cursosSinDia, cursoToAlumnos);
+
+  // Título y fecha de actualización de alumnos
+  const now = new Date();
+  hoja.getRange("A3").setValue(`Última actualización alumnos: ${now}`);
 }
 
 function listarAlumnosForAllCenters() {

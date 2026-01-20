@@ -12,3 +12,11 @@ function getCentros() {
 
   return centros;
 }
+
+
+function getTelefAlumno(alumnoId) {
+  const token = ensureToken(false);
+  const res = fetchJSONWithAuth(URL_ALUMNO + alumnoId, token);
+
+  return res.telefono;
+}
