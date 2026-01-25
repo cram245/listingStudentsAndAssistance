@@ -137,3 +137,27 @@ function mezclarFilas(hoja, filaOrigen, filaDestino) {
   hoja.getRange(filaDestino, 1, 1, lastCol).setValues([combinado]);
   hoja.getRange(filaOrigen, 1, 1, lastCol).clearContent(); // opcional
 }
+
+
+
+function obtenerNombreCurso(curso) {
+    // 1. Buscamos la posición del primer guión
+    const primerGuion = curso.indexOf("-");
+    
+    // 2. Buscamos la posición del segundo guión (empezando a buscar después del primero)
+    const segundoGuion = curso.indexOf("-", primerGuion + 1);
+
+    // Si no hay segundo guión, devolvemos algo por defecto o el string entero
+    if (segundoGuion === -1) return "Formato incorrecto";
+
+    // 3. Cortamos el string desde el carácter siguiente al 2º guión hasta el final
+    // Esto nos da: "Nombre del curso-avanzado - Tarda"
+    const restoDelString = curso.substring(segundoGuion + 1).trim();
+
+    // 4. Ahora aplicamos la segunda regla: cortar si hay un "- " (guión + espacio)
+    // El [0] nos da todo lo que hay ANTES de ese separador. 
+    // Si no hay separador, nos da el string entero.
+    const realCurso = restoDelString.split("- ")[0];
+
+    return realCurso;
+}

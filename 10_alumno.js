@@ -47,47 +47,28 @@ class Alumno {
   }
 
   get cursoEscolar() {
-    if (!this.fechaNacimiento) return "Desconocido";
+    
+    let edad = -1;
+    
+    if (this.fechaNacimiento) {
+      const nacimiento = new Date(this.fechaNacimiento);
+      const hoy = new Date(); 
 
-    const nacimiento = new Date(this.fechaNacimiento);
-    const hoy = new Date();
+      // Determinar el año escolar actual
+      const anyActual = hoy.getFullYear();
+      const mesActual = hoy.getMonth(); // 0 = enero, 11 = diciembre
+      const anyEscolarInicio = mesActual >= 8 ? anyActual : anyActual - 1; // si es septiembre o más, empieza nuevo curso
 
-    // Determinar el año escolar actual
-    const anyActual = hoy.getFullYear();
-    const mesActual = hoy.getMonth(); // 0 = enero, 11 = diciembre
-    const anyEscolarInicio = mesActual >= 8 ? anyActual : anyActual - 1; // si es septiembre o más, empieza nuevo curso
-
-    // Edad a 31 de diciembre del año de inicio del curso
-    const fechaReferencia = new Date(anyEscolarInicio, 11, 31);
-    let edad = fechaReferencia.getFullYear() - nacimiento.getFullYear();
-    const m = fechaReferencia.getMonth() - nacimiento.getMonth();
-    if (m < 0 || (m === 0 && fechaReferencia.getDate() < nacimiento.getDate())) {
-      edad--;
+      // Edad a 31 de diciembre del año de inicio del curso
+      const fechaReferencia = new Date(anyEscolarInicio, 11, 31);
+      edad = fechaReferencia.getFullYear() - nacimiento.getFullYear();
+      const m = fechaReferencia.getMonth() - nacimiento.getMonth();
+      if (m < 0 || (m === 0 && fechaReferencia.getDate() < nacimiento.getDate())) {
+        edad--;
+      }
     }
-
-    // Relación edad → curso
-    switch (edad) {
-      case 3:
-        return "I3";
-      case 4:
-        return "I4";
-      case 5:
-        return "I5";
-      case 6:
-        return "1r";
-      case 7:
-        return "2n";
-      case 8:
-        return "3r";
-      case 9:
-        return "4r";
-      case 10:
-        return "5è";
-      case 11:
-        return "6è";
-      default:
-        return edad;
-    }
+    
+    return NOMBRES_CURSOS[edad] || edad;
   }
 
 

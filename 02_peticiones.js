@@ -20,3 +20,12 @@ function getTelefAlumno(alumnoId) {
 
   return res.telefono;
 }
+
+
+function getCursos() {
+
+  const token = ensureToken(false);
+  const res = fetchJSONWithAuth(URL_CURSOS, token);
+
+  return res;
+}
