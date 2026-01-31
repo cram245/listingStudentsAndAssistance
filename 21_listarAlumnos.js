@@ -1,35 +1,11 @@
-function mapAlumnosToCurso(alumnos) {
-  
-  const cursoToAlumnos = new Map();
-  for (const a of alumnos) {
-
-    const alumno = new Alumno(a);
-    for (const curso of alumno.cursos) {
-      if (!cursoToAlumnos.has(curso)) cursoToAlumnos.set(curso, new Set());
-        cursoToAlumnos.get(curso).add(alumno);
-    }
-  }
-
-  return cursoToAlumnos;
-}
-
-
+// aqui mergeamos los cursos con las promociones de cursos de varios dias
 function addAlumnosToCursos(alumnos, cursos) {
-
   for (const a of alumnos) {
 
     const alumno = new Alumno(a);
-
-    if (alumno.id == 1028)
-      Logger.log([...alumno.cursos]);
-
     for (const curso of alumno.cursos) {
-      
+  
       const realCurso = obtenerNombreCurso(curso);
-
-      if (alumno.id == 1028) {
-        Logger.log(realCurso);
-      }
       
       for (const aux of cursos)
         if (aux.nombre == realCurso)
@@ -69,7 +45,7 @@ function escribirAlumnosPorGrupo(hoja, row, col, cursos) {
       });
 
       for (const alumno of alumnosOrdenados) {
-        hoja.getRange(row, col).setValue(alumno.nombreCompleto);
+        escribirAlumno(hoja.getRange(row, col), alumno.nombreCompleto);
         hoja.getRange(row, col + 1).setValue(alumno.cursoEscolar);
         
         // si se desea obtener los telefonos de los alumnos descommentar
@@ -82,8 +58,6 @@ function escribirAlumnosPorGrupo(hoja, row, col, cursos) {
 
       row += 1; // línea en blanco
     }
-
-    return row;
     
   }
 
@@ -91,6 +65,8 @@ function escribirAlumnosPorGrupo(hoja, row, col, cursos) {
   hoja.autoResizeColumn(col + 1);   // curso
   hoja.setColumnWidth(col + 2, 20); // check box
   hoja.setColumnWidth(col + 3, 40); // espacio entre dias
+
+  return row;
 }
 
 function escribirCursosYAlumnosPorCentro(ss = SpreadsheetApp.getActiveSpreadsheet(), idCentro = getSelectedCenterId()) {
@@ -130,8 +106,6 @@ function escribirCursosYAlumnosPorCentro(ss = SpreadsheetApp.getActiveSpreadshee
       if (curso.diaSem.includes(dia)) {
 
         if (!mapCursosDelDia.has(curso.timeSlot)) mapCursosDelDia.set(curso.timeSlot, new Set());
-
-        Logger.log(curso);
         mapCursosDelDia.get(curso.timeSlot).add(curso);
       }
     }
@@ -141,9 +115,10 @@ function escribirCursosYAlumnosPorCentro(ss = SpreadsheetApp.getActiveSpreadshee
 
       if (dia != "Sense dia") {
         escirbirDia(hoja.getRange(row, col), dia)
-        row += 2; // dejamos dos de espacio
-      }
         
+      }
+      
+      row += 2; // dejamos dos de espacio
 
 
       for (timeSlot of CATALAN_TIME_SLOT) {

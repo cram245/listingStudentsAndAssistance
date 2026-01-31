@@ -7,6 +7,7 @@ function onOpen() {
     .addItem("Processar assistencias para todos los centros", "listarAlumnosForAllCenters")
     .addItem("Procesar assistencias del centro seleccionado", "processarAssistenciaCentro")
     .addItem("Arreglar filas duplicadas en assistencia del centro seleccionado", "arreglarNombresDuplicadosCentro")
+    .addItem("Testing", "getDiffsAlumnosCenter")
     .addToUi();
 
   loadCentros();
