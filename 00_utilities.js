@@ -3,15 +3,16 @@ function obtenerLibro(nombreLibro, ifNotExistCreate = true) {
   const archivos = DriveApp.getFilesByName(nombreLibro);
   let libro = null;
 
-  if (archivos.hasNext()) {
-    // Si ya existe, lo abrimos
+  if (archivos.hasNext()) { // Si ya existe, lo abrimos
     const archivo = archivos.next();
     libro = SpreadsheetApp.open(archivo);
     Logger.log("Libro encontrado: " + libro.getUrl());
-  } else if (ifNotExistCreate) {
-    // Si no existe, lo creamos
+
+  } 
+  
+  else if (ifNotExistCreate) { // Si no existe, lo creamos  
     libro = SpreadsheetApp.create(nombreLibro);
-    const sheet= libro.getActiveSheet();
+    const sheet = libro.getActiveSheet();
     sheet.setName("Alumnos");
     libro.insertSheet("Assistencias");
 
@@ -19,6 +20,26 @@ function obtenerLibro(nombreLibro, ifNotExistCreate = true) {
   }
 
   return libro;
+}
+
+
+// obtiene una hoja si no existe la crea si el ifNotExistCreate esta marcado como true
+function obtenerHoja(libro, nombreHoja, ifNotExistCreate = false) {
+  
+  let hoja = libro.getSheetByName(nombre);
+
+  if (hoja == null) {
+    if (ifNotExistCreate) {
+      libro.insertSheet(nombreHoja);
+      return libro.getSheetByName(nombreHoja);
+    }
+    else {
+      showError("El libro " + libro.getName() + " no tiene la hoja " + nombreHoja);
+      return null;
+    }
+  }
+
+  return hoja;
 }
 
 function obtenerIdsDeLibros(nombres) {
@@ -141,23 +162,23 @@ function mezclarFilas(hoja, filaOrigen, filaDestino) {
 
 
 function obtenerNombreCurso(curso) {
-    // 1. Buscamos la posición del primer guión
-    const primerGuion = curso.indexOf("-");
-    
-    // 2. Buscamos la posición del segundo guión (empezando a buscar después del primero)
-    const segundoGuion = curso.indexOf("-", primerGuion + 1);
+  // 1. Buscamos la posición del primer guión
+  const primerGuion = curso.indexOf("-");
+  
+  // 2. Buscamos la posición del segundo guión (empezando a buscar después del primero)
+  const segundoGuion = curso.indexOf("-", primerGuion + 1);
 
-    // Si no hay segundo guión, devolvemos algo por defecto o el string entero
-    if (segundoGuion === -1) return "Formato incorrecto";
+  // Si no hay segundo guión, devolvemos algo por defecto o el string entero
+  if (segundoGuion === -1) return "Formato incorrecto";
 
-    // 3. Cortamos el string desde el carácter siguiente al 2º guión hasta el final
-    // Esto nos da: "Nombre del curso-avanzado - Tarda"
-    const restoDelString = curso.substring(segundoGuion + 1).trim();
+  // 3. Cortamos el string desde el carácter siguiente al 2º guión hasta el final
+  // Esto nos da: "Nombre del curso-avanzado - Tarda"
+  const restoDelString = curso.substring(segundoGuion + 1).trim();
 
-    // 4. Ahora aplicamos la segunda regla: cortar si hay un "- " (guión + espacio)
-    // El [0] nos da todo lo que hay ANTES de ese separador. 
-    // Si no hay separador, nos da el string entero.
-    const realCurso = restoDelString.split("- ")[0];
+  // 4. Ahora aplicamos la segunda regla: cortar si hay un "- " (guión + espacio)
+  // El [0] nos da todo lo que hay ANTES de ese separador. 
+  // Si no hay separador, nos da el string entero.
+  const realCurso = restoDelString.split("- ")[0];
 
-    return realCurso;
+  return realCurso;
 }

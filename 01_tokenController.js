@@ -32,11 +32,22 @@ function getToken() {
 
 function ensureToken(force = false) {
   let token = PropertiesService.getScriptProperties().getProperty("IC_TOKEN");
+  
+  // Si forzamos, o no hay token, o es inválido...
   if (force || !token || typeof token !== "string" || token.trim() === "") {
-    const maybe = getToken();
-    token = typeof maybe === "string" ? maybe : null;
+    console.log("Intentando obtener nuevo token..."); // Log de aviso
+    
+    const resultadoLogin = getToken(); // Aquí recibimos el string O el objeto de error
+
+    if (typeof resultadoLogin === "string") {
+      token = resultadoLogin;
+    }
+    else {
+      console.error("FALLO EN LOGIN:", JSON.stringify(resultadoLogin)); // ¡Esto te dirá el error real!
+      throw new Error("No se pudo obtener el token. Razón: " + (resultadoLogin.error || "Desconocida"));
+    }
   }
-  if (!token) throw new Error("Sin token válido. Ejecuta getToken() primero.");
+  
   return token;
 }
 

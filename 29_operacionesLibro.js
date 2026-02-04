@@ -68,7 +68,7 @@ function obtenerCursosConAlumnosColumna(hoja, numCol, startingRow = 1) {
 
   const lastRow = hoja.getLastRow();
 
-  if (lastRow == 0 || lastRow < startingRow) return {};
+  if (lastRow == 0 || lastRow < startingRow) return new Map();
 
   const numFilas = lastRow - startingRow + 1;
   const datos = hoja.getRange(startingRow, numCol, numFilas).getValues().flat();
@@ -92,7 +92,9 @@ function obtenerCursosConAlumnosColumna(hoja, numCol, startingRow = 1) {
 
       if (!cursos.has(cursoActual)) cursos.set(cursoActual, new Set());  // nunca se deberia ejecutar esto
 
-      cursos.get(cursoActual).add(texto); // añadimos al alumno al curso
+      let id = hoja.getRange(i, numCol + 2).getValue();
+      let alumnoRed = AlumnoReducido(id, texto);
+      cursos.get(cursoActual).add(alumnoRed); // añadimos al alumno al curso
     }
   })
 
@@ -166,7 +168,7 @@ function getDiffsAlumnosCenter() {
   
   
   //escribirDiffs(datos);
-  getDiffs(datos);
+  getDiffs(libro, datos);
 }
 
 

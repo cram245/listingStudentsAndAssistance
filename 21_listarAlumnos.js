@@ -47,13 +47,13 @@ function escribirAlumnosPorGrupo(hoja, row, col, cursos) {
       for (const alumno of alumnosOrdenados) {
         escribirAlumno(hoja.getRange(row, col), alumno.nombreCompleto);
         hoja.getRange(row, col + 1).setValue(alumno.cursoEscolar);
+        hoja.getRange(row, col + 2).setValue(alumno.id);
+
         
-        // si se desea obtener los telefonos de los alumnos descommentar
-        //hoja.getRange(row, col + 2).setValue(getTelefAlumno(alumno.id));
         row += 1;
       }
       
-      const rangoCheckboxes = hoja.getRange(row - alumnosOrdenados.length, col + 2, alumnosOrdenados.length, 1);
+      const rangoCheckboxes = hoja.getRange(row - alumnosOrdenados.length, col + 3, alumnosOrdenados.length, 1);
       rangoCheckboxes.insertCheckboxes();
 
       row += 1; // línea en blanco
@@ -63,8 +63,9 @@ function escribirAlumnosPorGrupo(hoja, row, col, cursos) {
 
   hoja.autoResizeColumn(col);       // nombre
   hoja.autoResizeColumn(col + 1);   // curso
-  hoja.setColumnWidth(col + 2, 20); // check box
-  hoja.setColumnWidth(col + 3, 40); // espacio entre dias
+  hoja.hideColumns(col + 2);        // id del alumno
+  hoja.setColumnWidth(col + 3, 20); // check box
+  hoja.setColumnWidth(col + 4, 40); // espacio entre dias
 
   return row;
 }

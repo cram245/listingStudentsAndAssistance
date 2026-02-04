@@ -15,7 +15,6 @@ class Curso {
     }
 
 
-
     getDia() {
 
         const diasEncontrados = CATALAN_DAYS.filter(dia => {
@@ -35,5 +34,9 @@ class Curso {
         }
 
         return "Sense timeslot";
+    }
+
+    addAlumno(alumno) {
+        this.alumnos.add(alumno);
     }
 }

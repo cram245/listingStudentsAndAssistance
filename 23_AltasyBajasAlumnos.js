@@ -95,14 +95,14 @@ function escribirDiffsCurso(hoja, row, col, dia, cursoDiaAntiguo, alumnos, datos
 
 
 
-function escribirDiffs(datosAntiguos, datosNuevos) {
-    const ss = SpreadsheetApp.getActiveSpreadsheet();
-    const hoja = ss.getSheetByName("CENTROS_DATA");
+function escribirDiffs(libro, datosAntiguos, datosNuevos) {
+    
+    const hoja = obtenerHoja(libro, "Altas y bajas alumnos", true);
 
     const mapTelefonos = new Map();
 
     if (hoja == null) 
-        return showError("ERROR! El libro no tiene una hoja llamada CENTROS_DATA con los datos de estos");
+        return showError("ERROR! El libro no tiene una hoja llamada Altas y bajas alumnos con los datos de estos");
 
     hoja.getRange("A3:Z").clearContent().clearFormat();
 
@@ -133,14 +133,16 @@ function escribirDiffs(datosAntiguos, datosNuevos) {
 
 
 
-function getDiffs(datosAntiguos) {
+function getDiffs(libro, datosAntiguos) {
 
     const datosNuevos = obtenerDatosActuales();
-    escribirDiffs(datosAntiguos, datosNuevos);
+    escribirDiffs(libro, datosAntiguos, datosNuevos);
     
 
     
     /*
+
+
     const objetoLegible = {};
 
     datosNuevos.forEach((mapCursos, dia) => {
